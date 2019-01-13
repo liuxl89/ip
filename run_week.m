@@ -1,8 +1,9 @@
 clear
+clc
 
 % This is to control the global vars.
 test = 0;
-num_days_to_run = 5;
+num_days_to_run = 1;
 
 if num_days_to_run == 1
   clc
@@ -58,3 +59,17 @@ printf("vec_b_le = (%d, %d).\n\n", rows(vec_b_le), columns(vec_b_le));
 
 printf("lb       = (%d, %d).\n", rows(lb), columns(lb));
 printf("ub       = (%d, %d).\n", rows(ub), columns(ub));
+
+ctype = [repelem("S", 1, length(vec_b)), repelem("L", 1, length(vec_b_le))];
+vartype = repelem("I", 1, length(lb));
+opt_type = -1; % maximization problem.
+[opt, fmax, errnum, extra] = glpk(
+    goal_week,
+    [mat_a; mat_a_le],
+    [vec_b; vec_b_le],
+    lb, ub,
+    ctype, vartype, opt_type);
+    
+printf("opt      = (%d, %d).\n", rows(opt), columns(opt));
+printf("(Goal, errnum) = (%g, %g).\n", fmax, errnum);
+extra
