@@ -4,7 +4,8 @@
 function [day_goal, day_mat_a, day_vec_b, day_mat_a_le, day_vec_b_le, ...
 	  day_lb, day_ub] = matrix_for_a_day(
 	      day_of_week, task_pairs, task_pair_conflicts, task_person_pairs,
-	      cardiology_tasks, cardiology_people)
+	      cardiology_tasks, cardiology_people,
+	      people_columns, task_columns, task_weights)
   global NUM_PEOPLE;
   global NUM_TASKS;
   day_goal = [];
@@ -44,5 +45,9 @@ function [day_goal, day_mat_a, day_vec_b, day_mat_a_le, day_vec_b_le, ...
   day_mat_a_le = [day_mat_a_le; mat_a_le];
   day_vec_b_le = [day_vec_b_le; vec_b_le];
   day_ub = min(day_ub, ub);
+
+  % Goal function from columnwise requirements.
+  day_goal = goal_for_columns(
+      people_columns, task_columns, task_weights);
 
 endfunction

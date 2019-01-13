@@ -13,6 +13,7 @@ function [week_goal, week_mat_a, week_vec_b, week_mat_a_le, week_vec_b_le, ...
 	  week_lb, week_ub] = matrix_for_a_week(
 	      day_of_week, days, fixed_task_pairs, fixed_task_pair_conflicts,
 	      init_task_person_pairs, cardiology_tasks, cardiology_people,
+	      people_columns, task_columns, task_weights,
 	      work_load_ranges = [26, 0, 0.5])
   global NUM_PEOPLE;
   global NUM_TASKS;
@@ -37,12 +38,14 @@ function [week_goal, week_mat_a, week_vec_b, week_mat_a_le, week_vec_b_le, ...
      day_lb, day_ub] = matrix_for_a_day( ...
 	 mod(day_of_week+ day - 1, DAYS_PER_WEEK), fixed_task_pairs, ...
 	 fixed_task_pair_conflicts, task_person_pairs, ...
-	 cardiology_tasks, cardiology_people);
+	 cardiology_tasks, cardiology_people,
+	 people_columns, task_columns, task_weights);
 
     [week_mat_a, week_vec_b] = update_mat(week_mat_a, week_vec_b,
 					  day_mat_a, day_vec_b);
     [week_mat_a_le, week_vec_b_le] = update_mat(week_mat_a_le, week_vec_b_le,
 						day_mat_a_le, day_vec_b_le);
+    week_goal = update_vec(week_goal, day_goal);
     week_lb = update_vec(week_lb, day_lb);
     week_ub = update_vec(week_ub, day_ub);
 
