@@ -60,7 +60,10 @@ printf("vec_b_le = (%d, %d).\n\n", rows(vec_b_le), columns(vec_b_le));
 printf("lb       = (%d, %d).\n", rows(lb), columns(lb));
 printf("ub       = (%d, %d).\n", rows(ub), columns(ub));
 
-ctype = [repelem("S", 1, length(vec_b)), repelem("L", 1, length(vec_b_le))];
+% U: Ax <= b;  (*)
+% S: Ax = b;   (*)
+% L: Ax >= b.
+ctype = [repelem("S", 1, length(vec_b)), repelem("U", 1, length(vec_b_le))];
 vartype = repelem("I", 1, length(lb));
 opt_type = -1; % maximization problem.
 [opt, fmax, errnum, extra] = glpk(
