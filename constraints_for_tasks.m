@@ -21,7 +21,7 @@ function [mat_a_le, vec_b_le] = constraints_for_tasks()
     vec_b_le = [vec_b_le; 1];
   end
 
-  for pm = 1 : NUM_TASKS_PM
+  for pm = NUM_TASKS_AM + 1 : NUM_TASKS
     task_pm = lb;
     task_pm(1 : NUM_PEOPLE, pm) = 1;
     mat_a_le = [mat_a_le; task_pm(:)'];
