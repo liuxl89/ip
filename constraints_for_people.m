@@ -31,7 +31,7 @@ function [mat_a_le, vec_b_le, ub] = constraints_for_people(day_of_week = 0)
   % Always out of office on Thursday.
   ub = ones(size(lb));
   if day_of_week == 4
-    % ub(28, :) = 0;
+    ub(28, :) = 0;
   endif
   ub = ub(:);
 
