@@ -1,5 +1,6 @@
 % Which set of tasks to specify for people for the next day.
 
+%  - current_day_of_week: MTWRF;
 %  - task_person_pairs_init: [rows, 6], for each weekday, e.g.
 %    [t_i, p_i_M, p_i_T, p_i_W, p_i_R, p_i_F;];
 %
@@ -8,10 +9,10 @@
 
 
 function next_task_person_pairs = task_person_pairs_next_day(
-    task_person_pairs_init, task_person_pairs_cell)
-  next_task_person_pairs = zeros(size(task_person_pairs_init));
-  % Copies task ids.
-  next_task_person_pairs(:, 1) = task_person_pairs_init(:, 1);
+    current_day_of_week, task_person_pairs_init, task_person_pairs_cell)
+  % By default, it's the same as previous pairs, in case some entries don't
+  % need to be updated.
+  next_task_person_pairs = task_person_pairs_init;
 
   for row = 1 : rows(task_person_pairs_init)
     task_person_pair = task_person_pairs_init(row, :);
@@ -23,6 +24,11 @@ function next_task_person_pairs = task_person_pairs_next_day(
       queue = [];
       if iscell(task_person_pair_cell_row)
 	queue = task_person_pair_cell_row{day_of_week};
+
+	if mod(current_day_of_week + day_of_week, 2) ~= 0
+	  % Only updates MWF or TR together.
+	  continue;
+	endif
       else
 	% TODO(liuxl): Could optimize for the simplest case, when MTWRF are all
 	% the same, i.e. no need to differentiate which day_of_week is.
