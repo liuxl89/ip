@@ -12,7 +12,8 @@
 function [week_goal, week_mat_a, week_vec_b, week_mat_a_le, week_vec_b_le, ...
 	  week_lb, week_ub] = matrix_for_a_week(
 	      day_of_week, days, fixed_task_pairs, fixed_task_pair_conflicts,
-	      init_task_person_pairs, cardiology_tasks, cardiology_people,
+	      task_person_pairs_init, task_person_pairs_cell,
+	      cardiology_tasks, cardiology_people,
 	      people_columns, task_columns, task_weights,
 	      work_load_ranges = [26, 0, 0.5])
   global NUM_PEOPLE;
@@ -31,7 +32,12 @@ function [week_goal, week_mat_a, week_vec_b, week_mat_a_le, week_vec_b_le, ...
   week_lb = [];
   week_ub = [];
 
-  task_person_pairs = init_task_person_pairs;  % TODO(liuxl).
+  if rows(task_person_pairs_init) ~= length(task_person_pairs_cell)
+    error("Task person pairs dimensions don't match: %d != %d.\n",
+	  rows(task_person_pairs_init), rows(task_person_pairs_cell));
+  endif
+
+  task_person_pairs = task_person_pairs_init;
   for day = 1 : days
     % Augments all weekly matrices.
     [day_goal, day_mat_a, day_vec_b, day_mat_a_le, day_vec_b_le, ...
@@ -51,7 +57,12 @@ function [week_goal, week_mat_a, week_vec_b, week_mat_a_le, week_vec_b_le, ...
 
     % Generates the next task_person_pairs, until the last day.
     if day != days
-      task_person_pairs = init_task_person_pairs;  % TODO(liuxl).
+      expiring_day_of_week = day_of_week + day - 1;
+      while expiring_day_of_week > 5
+        expiring_day_of_week -= 5;
+      endwhile
+      task_person_pairs = task_person_pairs_next_day(
+          expiring_day_of_week, task_person_pairs, task_person_pairs_cell);
     endif
   endfor
 
