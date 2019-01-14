@@ -31,7 +31,10 @@ function next_task_person_pairs = task_person_pairs_next_day(
 
       current_person = task_person_pair(1 + day_of_week);
       % mod() is to make sure it's a circular queue.
-      next_index = mod(find(queue == current_person) + 1, length(queue));
+      next_index = find(queue == current_person) + 1;
+      if next_index > length(queue)
+        next_index -= length(queue);
+      endif
       next_person = queue(next_index);
 
       % First column is task id.
