@@ -1,13 +1,15 @@
 % Which set of tasks to specify for people.
 
+%   - tasks_to_people_file: **initial** value for given tasks;
 %   - tasks_to_people: **initial** value for given tasks;
 %     e.g. [1, 2, 2, 2, 2, 2; 2, 3, 4, 3, 4, 3] means:
 %     * 1st task is assigned to 2nd person on MTWRF;
 %     * 2nd task is assigned to 3rd person on MWF and 4th person if TR.
 
 
-function tasks_to_people_cell = read_task_person_pairs_cell_csv(
-    tasks_to_people, dir="~/Desktop/github/ip/")
+function [tasks_to_people, tasks_to_people_cell] = read_task_person_pairs_cell_csv(
+    tasks_to_people_file="task_n_to_people_init.csv", dir="~/Desktop/github/ip/")
+  tasks_to_people = read_csv_from_row_n(tasks_to_people_file, dir, 1);
   tasks_to_people_cell = {};
 
   for row = 1 : rows(tasks_to_people)
