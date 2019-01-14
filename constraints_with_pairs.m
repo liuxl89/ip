@@ -50,7 +50,7 @@ function [mat_a, vec_b, mat_a_le, vec_b_le] = constraints_with_pairs(
     indices = lb;
     indices(task_person_pair(2), task_person_pair(1)) = 1;
 
-    mat_a_new = [mat_a; indices(:)'];
+    mat_a_new = [mat_a_new; indices(:)'];
     vec_b_new = [vec_b_new; 1]; 
   end
   mat_a = [mat_a; mat_a_new];
