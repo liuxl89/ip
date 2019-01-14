@@ -28,7 +28,8 @@ function vec_c = goal_for_columns(
 
     people_column = people_columns(:, column);
     goal_for_a_column = lb;
-    for selected_task = selected_tasks
+    for selected_task_id = 1 : length(selected_tasks)
+      selected_task = selected_tasks(selected_task_id);
       goal_for_a_column(:, selected_task) = people_column;
       goal_for_a_column .*= repmat(selected_weights', NUM_PEOPLE, 1);
     endfor
