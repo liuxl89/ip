@@ -13,4 +13,10 @@ function [people_columns, task_am_columns, task_pm_columns] = read_csvs(
 	    columns(people_columns), columns(task_am_columns),
 	    columns(task_pm_columns));
   endif
+
+  num_columns = columns(people_columns);
+  % Removes the first column, as they're the index for each person or task.
+  people_columns = people_columns(:, 2 : num_columns);
+  task_am_columns = task_am_columns(:, 2 : num_columns);
+  task_pm_columns = task_pm_columns(:, 2 : num_columns);
 endfunction
