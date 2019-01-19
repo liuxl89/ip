@@ -14,6 +14,7 @@ global NUM_TASKS_AM = 30;
 global NUM_TASKS_PM = 28;
 global NUM_TASKS = NUM_TASKS_AM + NUM_TASKS_PM;
 global NUM_COLUMNS = 19;
+global PRIORITY_FACTOR = 2.0;
 
 if test
   NUM_PEOPLE = 3;
@@ -51,7 +52,7 @@ cardiology_people = [];
 
 
 % Columns.
-task_weights = ones(NUM_TASKS, 1);
+task_weights = zeros(NUM_TASKS, 1);
 if test
   people_columns = zeros(NUM_PEOPLE, NUM_COLUMNS);
   task_columns = zeros(NUM_TASKS, NUM_COLUMNS);
@@ -105,5 +106,7 @@ combined_vec_b = [vec_b; vec_b_le];
     ctype, vartype, opt_type);
     
 printf("opt      = (%d, %d).\n", rows(opt), columns(opt));
-printf("(Goal, errnum) = (%g (<= %g), %g).\n", fmax, sum_weights_week, errnum);
+printf("(Goal, ratio (%%), errnum) = (%g (<= %g), %g%%, %g).\n",
+       fmax, sum_weights_week, 100.0 * fmax / max(sum_weights_week, 1.0),
+       errnum);
 extra
