@@ -67,7 +67,8 @@ printf("task_columns  = (%d, %d).\n", rows(task_columns), columns(task_columns))
 %
 % Compute all matrices for given days.
 %
-[goal_week, mat_a, vec_b, mat_a_le, vec_b_le, lb, ub] = matrix_for_a_week(
+[goal_week, sum_weights_week, ...
+ mat_a, vec_b, mat_a_le, vec_b_le, lb, ub] = matrix_for_a_week(
   1,  % Monday.
   num_days_to_run,
   fixed_task_pairs, fixed_task_pair_conflicts,
@@ -104,5 +105,5 @@ combined_vec_b = [vec_b; vec_b_le];
     ctype, vartype, opt_type);
     
 printf("opt      = (%d, %d).\n", rows(opt), columns(opt));
-printf("(Goal, errnum) = (%g, %g).\n", fmax, errnum);
+printf("(Goal, errnum) = (%g (<= %d), %g).\n", fmax, sum_weights_week, errnum);
 extra
