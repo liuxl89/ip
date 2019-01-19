@@ -7,12 +7,36 @@
 %   - task_weights: weights for multiple tasks, default is the same for all.
 
 
-function vec_c = goal_for_columns(
+function [vec_c, sum_weights] = goal_for_columns(
     people_columns, task_columns, task_weights=ones(rows(task_columns), 1))
   global NUM_PEOPLE;
   global NUM_TASKS;
+  global NUM_TASKS_AM;
+  global NUM_TASKS_PM;
+
   lb = zeros(NUM_PEOPLE, NUM_TASKS);
   goal = lb;
+
+  % When task_weights are all zeros, it means something special.
+  %   - In the morning, the n_th job has a weight of 2^(NUM_TASKS_AM - n);
+  %     i.e. 2^(#AM), 2^(#AM - 1), ... 1;
+  %   - In the afternoon, it's the same.
+  %
+  %   - Another manipulation is that the top one task in the morning and in the
+  %     afternoon should have the same weight.
+  sum_weights = sum((repmat(task_weights, 1, columns(task_columns)) .*
+		     task_columns)(:));
+  if (sum_weights == 0)
+    priority_factor = 1.2;
+    NUM_TASKS_XM = max(NUM_TASKS_AM, NUM_TASKS_PM);
+    task_weights(1 : NUM_TASKS_AM, :) = priority_factor.^(
+	NUM_TASKS_XM - [1 : NUM_TASKS_AM]);
+    task_weights(1 : NUM_TASKS_PM, :) = priority_factor.^(
+	NUM_TASKS_XM - [1 : NUM_TASKS_PM]);
+
+    sum_weights = sum((repmat(task_weights, 1, columns(task_columns)) .*
+		       task_columns)(:));
+  endif
 
   for column = 1 : columns(task_columns)
     task_column = task_columns(:, column);
@@ -37,5 +61,6 @@ function vec_c = goal_for_columns(
   endfor
 
   vec_c = goal(:);
+
 
 endfunction
