@@ -31,7 +31,7 @@ function [vec_c, sum_weights] = goal_for_columns(
     NUM_TASKS_XM = max(NUM_TASKS_AM, NUM_TASKS_PM);
     task_weights(1 : NUM_TASKS_AM, :) = priority_factor.^(
 	NUM_TASKS_XM - [1 : NUM_TASKS_AM]);
-    task_weights(1 : NUM_TASKS_PM, :) = priority_factor.^(
+    task_weights([1 : NUM_TASKS_PM] + NUM_TASKS_AM, :) = priority_factor.^(
 	NUM_TASKS_XM - [1 : NUM_TASKS_PM]);
 
     sum_weights = sum((repmat(task_weights, 1, columns(task_columns)) .*
