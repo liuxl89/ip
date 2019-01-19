@@ -105,5 +105,5 @@ combined_vec_b = [vec_b; vec_b_le];
     ctype, vartype, opt_type);
     
 printf("opt      = (%d, %d).\n", rows(opt), columns(opt));
-printf("(Goal, errnum) = (%g (<= %d), %g).\n", fmax, sum_weights_week, errnum);
+printf("(Goal, errnum) = (%g (<= %g), %g).\n", fmax, sum_weights_week, errnum);
 extra
